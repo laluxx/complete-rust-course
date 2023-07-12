@@ -1,0 +1,808 @@
+#+TITLE: Complete rust course
+#+AUTHOR: laluxx
+#+DESCRIPTION: My take on: complete rust course
+#+STARTUP: showeverything
+
+
+* COMPLETE RUST COURSE
+
+* Variables
+** 1 A variable can be used only if it has been initialized.
+#+begin_src rust
+fn main() {
+    let x: i32 = 5;
+    let _y: i32;
+
+
+    assert_eq!(x, 5);
+    println!("Succes!");
+}
+
+#+end_src
+
+#+RESULTS:
+: Succes!
+
+** 2 Use mut to mark a variable as mutable.
+#+begin_src rust
+fn main() {
+   let mut x: i32 = 1;
+   x = x + 2; //3
+
+   assert_eq!(x, 3);
+   println!("Succes!");
+}
+
+#+end_src
+
+#+RESULTS:
+: Succes!
+
+* Scope
+A scope is the range within the program for which the item is valid.
+** 3 Fix the error below with least amount of modification
+#+begin_src rust
+fn main() {
+    let x: i32 = 10;
+    {
+        let y: i32 = 5;
+        println!("The value of x is {} and value of y is {}", x, y);
+    }
+    println!("The value of x is {} and value of y is {}", x, y);
+}
+#+end_src
+
+#+RESULTS:
+: error: Could not compile `cargoyCFBwS`.
+
+*** 3 Modified version
+#+begin_src rust
+fn main() {
+    let x: i32 = 10;
+
+        let y: i32 = 5;
+        println!("The value of x is {} and value of y is {}", x, y);
+
+    println!("The value of x is {} and value of y is {}", x, y);
+}
+#+end_src
+
+#+RESULTS:
+: The value of x is 10 and value of y is 5
+: The value of x is 10 and value of y is 5
+
+** 4 Fix the error with the use of define_x
+#+begin_src rust
+fn main() {
+    println!("{}, world", x);
+}
+
+fn define_x() {
+    let x = "hello";
+}
+#+end_src
+
+#+RESULTS:
+: error: Could not compile `cargoZQETAw`.
+
+*** 4 Modified version
+#+begin_src rust
+fn main() {
+    define_x();
+}
+
+fn define_x() {
+    let x = "hello";
+    println!("{}, world", x);
+}
+#+end_src
+
+* Shadowing
+You can declare a new variable with the same name as a previous variable,
+here we can say the first one is shadowed by the second one.
+** 5
+#+begin_src rust
+// Only modify `assert_eq!` to make the `println!` work(print `42` in terminal)
+fn main() {
+    let x: i32 = 5;
+    {
+        let x = 12;
+        assert_eq!(x, 5);
+    }
+
+    assert_eq!(x, 12);
+
+    let x = 42;
+    println!("{}", x); // Prints "42".
+}
+
+#+end_src
+
+#+RESULTS:
+: thread 'main' panicked at 'assertion failed: `(left == right)`
+
+*** 5 Modified version
+#+begin_src rust
+fn main() {
+    let x: i32 = 5;
+    {
+        let x = 12;
+        assert_eq!(x, 12);
+    }
+
+    assert_eq!(x, 5);
+
+    let x = 42;
+    println!("{}", x); // Prints "42".
+}
+#+end_src
+
+#+RESULTS:
+: 42
+** 6
+#+begin_src rust
+// Remove a line in the code to make it compile
+fn main() {
+    let mut x: i32 = 1;
+    x = 7;
+    // Shadowing and re-binding
+    let x = x;
+    x += 3;
+
+
+    let y = 4;
+    // Shadowing
+    let y = "I can also be bound to text!";
+
+    println!("Success!");
+}
+#+end_src
+*** 6 Modified version
+#+begin_src rust
+fn main() {
+    let mut x: i32 = 1;
+    x = 7;
+    // Shadowing and re-binding
+    let mut x = x;
+    x += 3;
+
+
+    let y = 4;
+    // Shadowing
+    let y = "I can also be bound to text!";
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+* Unused variables
+** 7 Fix the warning below :
+There are 2 distinct solutions.
+#+begin_src rust
+fn main() {
+    let _x = 1;
+}
+
+// Warning: unused variable: `x`
+#+end_src
+*** 7 Modified version
+i dont see warnings in org and im lazy zZzzZZ
+#+begin_src rust
+fn main() {
+    let _x = 1;
+}
+#+end_src
+* Destructuring
+** 8 We can use a pattern with let to destructure a tuple to separate variables.
+Tip: you can use Shadowing or Mutability
+#+begin_src rust
+// Fix the error below with least amount of modification
+fn main() {
+    let (x, y) = (1, 2);
+    x += 2;
+
+    assert_eq!(x, 3);
+    assert_eq!(y, 2);
+
+    println!("Success!");
+}
+#+end_src
+*** 8 Modified version
+#+begin_src rust
+fn main() {
+    let (mut x, y) = (1, 2);
+    x += 2;
+
+    assert_eq!(x, 3);
+    assert_eq!(y, 2);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+* Destructuring assignments
+Introduced in Rust 1.59: You can now use tuple, slice, and struct patterns as the left-hand side of an assignment.
+** 9
+#+begin_src rust
+fn main() {
+    let (x, y);
+    (x,..) = (3, 4);
+    [.., y] = [1, 2];
+    // Fill the blank to make the code work
+    assert_eq!([x,y], __);
+
+    println!("Success!");
+}
+#+end_src
+*** 9 Modified version
+#+begin_src rust
+fn main() {
+    let (x, y);
+    (x,..) = (3, 4);
+    [.., y] = [1, 2];
+
+    assert_eq!([x,y], [3,2]);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+
+Basic types:
+* Numbers
+* integer
+- Signed integer: Can represent both positive and negative integers
+- Unsigned integer: Always positive integers
+** int table
+|---------+--------+----------|
+| Lenght  | Signed | Unsigned |
+|---------+--------+----------|
+| 8-bit   | i8     | u8       |
+|---------+--------+----------|
+| 16-bit  | i16    | u16      |
+|---------+--------+----------|
+| 32-bit  | i32    | u32      |
+|---------+--------+----------|
+| 64-bit  | i64    | u64      |
+|---------+--------+----------|
+| 128-bit | i128   | u128     |
+|---------+--------+----------|
+| arch    | isize  | usize    |
+|---------+--------+----------|
+
+#+begin_src rust
+// Remove something to make it work
+fn main() {
+    let x: i32 = 5;
+    let mut y: u32 = 5;
+
+    y = x;
+
+    let z = 10; // Type of z ?
+
+    println!("Success!");
+}
+#+end_src
+***  2 Modified version
+#+begin_src rust
+fn main() {
+    let x: i32 = 5;
+    let mut y = 5; // Implicit i32
+
+    y = x;
+
+    let z = 10; // Type of z ? : i32
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+
+
+** 2
+#+begin_src rust
+// Fill the blank
+fn main() {
+    let v: u16 = 38_u8 as __;
+
+    println!("Success!");
+}
+#+end_src
+*** 2 Modified version
+#+begin_src rust
+fn main() {
+    let v: u16 = 38_u8 as u16;
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+** 3
+#+begin_src rust
+// Modify `assert_eq!` to make it work
+fn main() {
+    let x = 5;
+    assert_eq!("u32".to_string(), type_of(&x));
+
+    println!("Success!");
+}
+
+// Get the type of given variable, return a string representation of the type  , e.g "i8", "u8", "i32", "u32"
+fn type_of<T>(_: &T) -> String {
+    format!("{}", std::any::type_name::<T>())
+}
+#+end_src
+*** 3 Modified version
+#+begin_src rust
+fn main() {
+    let x: u32 = 5; // still lazy
+    assert_eq!("u32".to_string(), type_of(&x));
+
+    println!("Success!");
+}
+
+// i don't understand this lol
+fn type_of<T>(_: &T) -> String {
+    format!("{}", std::any::type_name::<T>())
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+** 4
+#+begin_src rust
+// Fill the blanks to make it work
+fn main() {
+    assert_eq!(i8::MAX, __);
+    assert_eq!(u8::MAX, __);
+
+    println!("Success!");
+}
+#+end_src
+*** 4 Modified version
+#+begin_src rust
+fn main() {
+    assert_eq!(i8::MAX, i8::MAX);
+    assert_eq!(u8::MAX, u8::MAX);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+** 5
+#+begin_src rust
+// Fix errors and panics to make it work
+fn main() {
+   let v1 = 251_u8 + 8;
+   let v2 = i8::checked_add(251, 8).unwrap();
+   println!("{},{}",v1,v2);
+}
+#+end_src
+
+#+RESULTS:
+: error: Could not compile `cargoxO6P4u`.
+
+*** 5 Modified version
+#+begin_src rust
+fn main() {
+   let v1 = 251_u16 + 8;
+   let v2 = u16::checked_add(251, 8).unwrap();
+   println!("{},{}",v1,v2);
+}
+#+end_src
+
+#+RESULTS:
+: 259,259
+
+** 6
+#+begin_src rust
+// Modify `assert!` to make it work
+fn main() {
+    let v = 1_024 + 0xff + 0o77 + 0b1111_1111;
+    assert!(v == 1579);
+
+    println!("Success!");
+}
+#+end_src
+*** 6 Modified version
+#+begin_src rust
+fn main() {
+    let v = 1_024 + 0xff + 0o77 + 0b1111_1111; // 1024 + 255 + 63 + 255
+    assert!(v == 1597);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+* Floating point
+** 7
+#+begin_src rust
+// Fill the blank to make it work
+fn main() {
+    let x = 1_000.000_1; // ?
+    let y: f32 = 0.12; // f32
+    let z = 0.01_f64; // f64
+
+    assert_eq!(type_of(&x), "__".to_string());
+    println!("Success!");
+}
+
+fn type_of<T>(_: &T) -> String {
+    format!("{}", std::any::type_name::<T>())
+}
+#+end_src
+*** Modified version
+#+begin_src rust
+fn main() {
+    let x = 1_000.000_1; // f64
+    let y: f32 = 0.12;
+    let z = 0.01_f64; // f64
+
+    assert_eq!(type_of(&x), "f64".to_string());
+    println!("Success!");
+}
+
+fn type_of<T>(_: &T) -> String {
+    format!("{}", std::any::type_name::<T>())
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+** 8
+Make it work in 2 distinct ways
+this is stupid
+*** First way
+#+begin_src rust
+fn main() {
+    assert!(0.3 == 0.3);
+
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+
+*** Second way
+#+begin_src rust
+fn main() {
+    let x = 0.1 + 0.2;
+    let epsilon: f64 = 1e-9; // A small value to account for floating-point inaccuracies
+    // assert!(x==0.3);
+
+    assert!((x - 0.3).abs() < epsilon);
+
+    println!("Success!");
+}
+
+
+
+#+end_src
+
+#+RESULTS:
+: error: Could not compile `cargo10CHZH`.
+* Range
+** 9
+Two goals:
+- 1. Modify assert! to make it work
+- 2. Make println! output: 97 - 122
+#+begin_src rust
+fn main() {
+    let mut sum = 0;
+    for i in -3..2 {
+        sum += i
+    }
+
+    assert!(sum == -3);
+
+    for c in 'a'..='z' {
+        println!("{}",c);
+    }
+}
+#+end_src
+
+*** Modified version
+#+begin_src rust
+fn main() {
+    let mut sum = 0;
+    for i in -3..2 {
+        sum += i
+    }
+
+    // println!("{}",sum);
+
+    assert!(sum == -5);
+
+    for c in 'a'..='z' {
+        println!("{}",c as u8);
+    }
+}
+#+end_src
+
+#+RESULTS:
+#+begin_example
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+#+end_example
+** 10
+#+begin_src rust
+// Fill the blanks
+use std::ops::{Range, RangeInclusive}; //importing from std lib
+fn main() {
+    assert_eq!((1..5), Range{ start: 1, end: 5 });
+    assert_eq!((1..=5), RangeInclusive::new(1, 5));
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+* Computations
+** 11
+#+begin_src rust
+// Fill the blanks and fix the errors
+fn main() {
+    // Integer addition
+    assert!(1u32 + 2 == __);
+
+    // Integer subtraction
+    assert!(1i32 - 2 == __);
+    assert!(1u8 - 2 == -1);
+
+    assert!(3 * 50 == __);
+
+    assert!(9.6 / 3.2 == 3.0); // error ! make it work
+
+    assert!(24 % 5 == __);
+    // Short-circuiting boolean logic
+    assert!(true && false == __);
+    assert!(true || false == __);
+    assert!(!true == __);
+
+    // Bitwise operations
+    println!("0011 AND 0101 is {:04b}", 0b0011u32 & 0b0101);
+    println!("0011 OR 0101 is {:04b}", 0b0011u32 | 0b0101);
+    println!("0011 XOR 0101 is {:04b}", 0b0011u32 ^ 0b0101);
+    println!("1 << 5 is {}", 1u32 << 5);
+    println!("0x80 >> 2 is 0x{:x}", 0x80u32 >> 2);
+}
+#+end_src
+*** Modified version
+#+begin_src rust
+// Fill the blanks and fix the errors
+fn main() {
+    // Integer addition
+    assert!(1u32 + 2 == 3);
+
+    // Integer subtraction
+    assert!(1i32 - 2 == -1);
+    assert!(1i8 - 2 == -1);
+
+    assert!(3 * 50 == 150);
+
+
+    assert!(9.6 as f32 / 3.2 as f32 == 3.0 as f32); // It works!
+
+
+    // {let calc = 24 % 5;
+
+    // println!("{}",calc);}
+
+    assert!(24 % 5 == 4);  // Modulus operator. It calculates the remainder when one number is divided by another.
+
+    // Short-circuiting boolean logic
+    assert!(true && false == false);
+    assert!(true || false == true);
+    assert!(!true == false);
+
+    // Bitwise operations
+    println!("0011 AND 0101 is {:04b}", 0b0011u32 & 0b0101);
+    println!("0011 OR 0101 is {:04b}", 0b0011u32 | 0b0101);
+    println!("0011 XOR 0101 is {:04b}", 0b0011u32 ^ 0b0101);
+    println!("1 << 5 is {}", 1u32 << 5);
+    println!("0x80 >> 2 is 0x{:x}", 0x80u32 >> 2);
+}
+#+end_src
+
+#+RESULTS:
+: 0011 AND 0101 is 0001
+: 0011 OR 0101 is 0111
+: 0011 XOR 0101 is 0110
+: 1 << 5 is 32
+: 0x80 >> 2 is 0x20
+
+* Char, Bool and Unit
+
+* Char
+** 1
+#+begin_src rust
+// Make it work
+use std::mem::size_of_val;
+fn main() {
+    let c1 = 'a';
+    assert_eq!(size_of_val(&c1),1);
+
+    let c2 = '中';
+    assert_eq!(size_of_val(&c2),3);
+
+    println!("Success!");
+}
+#+end_src
+*** Modified version
+#+begin_src rust
+use std::mem::size_of_val;
+fn main() {
+    let c1 = 'a'; // 4 bytes
+    assert_eq!(size_of_val(&c1),4);
+
+    let c2 = '中';
+    assert_eq!(size_of_val(&c2),4);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+
+** 2
+#+begin_src rust
+// Make it work
+fn main() {
+    let c1 = "中";
+    print_char(c1);
+}
+
+fn print_char(c : char) {
+    println!("{}", c);
+}
+#+end_src
+*** Modified version
+#+begin_src rust
+fn main() {
+    let c1 = '中'; // 4 bytes  : char  "for strings" 'for char'
+    print_char(c1);
+}
+
+fn print_char(c : char) { // 1 arguement c of type : char
+    println!("{}", c);
+}
+#+end_src
+
+#+RESULTS:
+: 中
+
+* Bool
+** 3
+#+begin_src rust
+// Make println! work
+fn main() {
+    let _f: bool = false;
+
+    let t = true;
+    if !t {
+        println!("Success!");
+    }
+}
+#+end_src
+*** 3 Modified version
+#+begin_src rust
+fn main() {
+    let _f: bool = false;
+
+    let t = false;
+    if !t {
+        println!("Success!");
+    }
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+** 4
+#+begin_src rust
+// Make it work
+fn main() {
+    let f = true;
+    let t = true && false;
+    assert_eq!(t, f);
+
+    println!("Success!");
+}
+#+end_src
+*** 4 Modified version
+#+begin_src rust
+fn main() {
+    let f = true;
+    let t = true && true;
+    assert_eq!(t, f);
+
+    println!("Success!");
+}
+#+end_src
+
+#+RESULTS:
+: Success!
+* Unit type
+** 5
+#+begin_src rust
+// Make it work, don't modify `implicitly_ret_unit` !
+fn main() {
+    let _v: () = ();
+
+    let v = (2, 3);
+    assert_eq!(v, implicitly_ret_unit());
+
+    println!("Success!");
+}
+
+fn implicitly_ret_unit() {
+    println!("I will return a ()");
+}
+
+// Don't use this one
+fn explicitly_ret_unit() -> () {
+    println!("I will return a ()");
+}
+#+end_src
+*** 5 Modified version
+#+begin_src rust
+fn main() {
+    let _v: () = ();
+
+    let v = (2, 3);
+    assert_eq!(v, implicitly_ret_unit());
+
+    println!("Success!");
+}
+
+fn implicitly_ret_unit() {
+    println!("I will return a ()");
+}
+
+// Don't use this one
+fn explicitly_ret_unit() -> () {
+    println!("I will return a ()");
+}
+#+end_src
